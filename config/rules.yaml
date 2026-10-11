@@ -1,0 +1,52 @@
+ruleset:
+  name: GCP Least-Privilege and Storage Baseline
+  version: 1.0.0
+
+iam:
+  # Primitive Owner and Editor roles are prohibited for service accounts unless
+  # the principal is explicitly approved below. Exact values and shell-style
+  # globs are accepted, with or without the `serviceAccount:` prefix.
+  disallowed_service_account_roles:
+    - roles/owner
+    - roles/editor
+  privileged_service_account_allowlist: []
+
+  # Threshold exemptions do not exempt privileged-role or stale-key findings.
+  threshold_exempt_principals: []
+  max_roles_per_member: 10
+  max_permissions_per_member: 500
+  max_permissions_per_role: 1000
+
+  key_max_age_days: 90
+  user_managed_keys_only: true
+  include_disabled_keys: false
+
+storage:
+  public_principals:
+    - allUsers
+    - allAuthenticatedUsers
+  exempt_public_buckets: []
+  exempt_uniform_access_buckets: []
+  exempt_encryption_buckets: []
+
+  require_uniform_bucket_level_access: true
+  require_default_encryption: true
+
+  # GCS always encrypts data at rest. Set this to true only when organizational
+  # policy additionally mandates customer-managed encryption keys (CMEK).
+  require_cmek: false
+  approved_kms_keys: []
+  # Populate exact keys or organization-approved prefixes when a KMS allowlist
+  # is part of policy. When both lists are empty, any configured key is accepted.
+  approved_kms_key_prefixes: []
+
+severity_overrides:
+  IAM_PRIVILEGED_SERVICE_ACCOUNT: CRITICAL
+  IAM_STALE_SERVICE_ACCOUNT_KEY: MEDIUM
+  IAM_ROLE_THRESHOLD_EXCEEDED: MEDIUM
+  IAM_PERMISSION_THRESHOLD_EXCEEDED: HIGH
+  STORAGE_PUBLIC_ACCESS: CRITICAL
+  STORAGE_UNIFORM_ACCESS_DISABLED: HIGH
+  STORAGE_ENCRYPTION_DISABLED: HIGH
+  CMEK_NOT_CONFIGURED: HIGH
+  UNAPPROVED_KMS_KEY: HIGH

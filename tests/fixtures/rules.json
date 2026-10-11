@@ -1,0 +1,41 @@
+{
+  "ruleset": {
+    "name": "Test least-privilege baseline",
+    "version": "1.0.0-test"
+  },
+  "iam": {
+    "disallowed_service_account_roles": [
+      "roles/owner",
+      "roles/editor"
+    ],
+    "privileged_service_account_allowlist": [
+      "serviceAccount:approved-*@clean-project.iam.gserviceaccount.com"
+    ],
+    "threshold_exempt_principals": [],
+    "key_max_age_days": 90,
+    "user_managed_keys_only": true,
+    "include_disabled_keys": false,
+    "max_roles_per_member": 10,
+    "max_permissions_per_member": 500,
+    "max_permissions_per_role": 1000
+  },
+  "storage": {
+    "public_principals": [
+      "allUsers",
+      "allAuthenticatedUsers"
+    ],
+    "exempt_public_buckets": [],
+    "exempt_uniform_access_buckets": [],
+    "exempt_encryption_buckets": [],
+    "require_uniform_bucket_level_access": true,
+    "require_default_encryption": true,
+    "require_cmek": true,
+    "approved_kms_keys": [
+      "projects/security/locations/asia-south1/keyRings/storage/cryptoKeys/approved"
+    ],
+    "approved_kms_key_prefixes": [
+      "projects/example-security/locations/asia-south1/keyRings/storage/cryptoKeys/"
+    ]
+  },
+  "severity_overrides": {}
+}

@@ -1,0 +1,40 @@
+{
+  "project_id": "clean-project",
+  "collected_at": "2026-08-22T08:00:00Z",
+  "iam_policy": {
+    "bindings": [
+      {
+        "role": "roles/viewer",
+        "members": ["group:security-readers@example.com"]
+      },
+      {
+        "role": "roles/logging.logWriter",
+        "members": ["serviceAccount:app@clean-project.iam.gserviceaccount.com"]
+      }
+    ]
+  },
+  "service_accounts": [
+    {
+      "email": "app@clean-project.iam.gserviceaccount.com",
+      "display_name": "Application runtime",
+      "disabled": false,
+      "keys": []
+    }
+  ],
+  "buckets": [
+    {
+      "name": "clean-private-bucket",
+      "location": "ASIA-SOUTH1",
+      "iam_policy": {"bindings": []},
+      "acl": [],
+      "default_object_acl": [],
+      "iam_configuration": {
+        "uniform_bucket_level_access": {"enabled": true},
+        "public_access_prevention": "enforced"
+      },
+      "encryption": {
+        "default_kms_key_name": "projects/security/locations/asia-south1/keyRings/storage/cryptoKeys/approved"
+      }
+    }
+  ]
+}

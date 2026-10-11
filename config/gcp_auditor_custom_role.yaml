@@ -1,0 +1,11 @@
+title: GCP Compliance Auditor
+description: Read-only metadata access for the local GCP compliance auditor.
+stage: GA
+includedPermissions:
+  - resourcemanager.projects.getIamPolicy
+  - iam.serviceAccounts.list
+  - iam.serviceAccountKeys.list
+  - iam.roles.get
+  - storage.buckets.list
+  - storage.buckets.get
+  - storage.buckets.getIamPolicy

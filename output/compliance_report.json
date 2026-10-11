@@ -1,0 +1,253 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2026-08-22T10:03:31.874666Z",
+  "project_id": "example-production",
+  "source": "offline",
+  "ruleset": {
+    "name": "GCP Least-Privilege and Storage Baseline",
+    "version": "1.0.0"
+  },
+  "summary": {
+    "total_resources_scanned": 6,
+    "projects_scanned": 1,
+    "iam_bindings_scanned": 4,
+    "service_accounts_scanned": 2,
+    "service_account_keys_scanned": 1,
+    "buckets_scanned": 2,
+    "checks_evaluated": 13,
+    "violations": 5,
+    "severity_counts": {
+      "CRITICAL": 3,
+      "HIGH": 1,
+      "MEDIUM": 1
+    },
+    "compliant": false
+  },
+  "findings": [
+    {
+      "finding_id": "FND-A43E7A961C7E66D5",
+      "rule_id": "IAM_PRIVILEGED_SERVICE_ACCOUNT",
+      "category": "IAM",
+      "severity": "CRITICAL",
+      "title": "Privileged primitive role assigned to service account",
+      "description": "Service account batch-runner@example-production.iam.gserviceaccount.com has roles/editor, which violates the configured least-privilege policy.",
+      "project_id": "example-production",
+      "resource": {
+        "type": "service_account",
+        "name": "batch-runner@example-production.iam.gserviceaccount.com"
+      },
+      "principal": "serviceAccount:batch-runner@example-production.iam.gserviceaccount.com",
+      "evidence": {
+        "role": "roles/editor",
+        "assigned_role": "roles/editor",
+        "disallowed_roles": [
+          "roles/editor",
+          "roles/owner"
+        ],
+        "conditional": false,
+        "conditions": []
+      },
+      "recommendation": "Remove the primitive Owner/Editor grant and replace it with the smallest predefined or custom role required by the workload.",
+      "frameworks": [
+        {
+          "framework": "CIS Google Cloud Platform Foundations Benchmark v3.0",
+          "control_id": "1.5",
+          "title": "Ensure service accounts do not have administrative privileges"
+        },
+        {
+          "framework": "NIST SP 800-53 Rev. 5",
+          "control_id": "AC-6",
+          "title": "Least Privilege"
+        },
+        {
+          "framework": "NIST SP 800-53 Rev. 5",
+          "control_id": "AC-6(5)",
+          "title": "Privileged Accounts"
+        }
+      ]
+    },
+    {
+      "finding_id": "FND-ED52080FE48BF4CE",
+      "rule_id": "IAM_PRIVILEGED_SERVICE_ACCOUNT",
+      "category": "IAM",
+      "severity": "CRITICAL",
+      "title": "Privileged primitive role assigned to service account",
+      "description": "Service account legacy-worker@example-production.iam.gserviceaccount.com has roles/owner, which violates the configured least-privilege policy.",
+      "project_id": "example-production",
+      "resource": {
+        "type": "service_account",
+        "name": "legacy-worker@example-production.iam.gserviceaccount.com"
+      },
+      "principal": "serviceAccount:legacy-worker@example-production.iam.gserviceaccount.com",
+      "evidence": {
+        "role": "roles/owner",
+        "assigned_role": "roles/owner",
+        "disallowed_roles": [
+          "roles/editor",
+          "roles/owner"
+        ],
+        "conditional": false,
+        "conditions": []
+      },
+      "recommendation": "Remove the primitive Owner/Editor grant and replace it with the smallest predefined or custom role required by the workload.",
+      "frameworks": [
+        {
+          "framework": "CIS Google Cloud Platform Foundations Benchmark v3.0",
+          "control_id": "1.5",
+          "title": "Ensure service accounts do not have administrative privileges"
+        },
+        {
+          "framework": "NIST SP 800-53 Rev. 5",
+          "control_id": "AC-6",
+          "title": "Least Privilege"
+        },
+        {
+          "framework": "NIST SP 800-53 Rev. 5",
+          "control_id": "AC-6(5)",
+          "title": "Privileged Accounts"
+        }
+      ]
+    },
+    {
+      "finding_id": "FND-40FE7624488CC627",
+      "rule_id": "STORAGE_PUBLIC_ACCESS",
+      "category": "STORAGE",
+      "severity": "CRITICAL",
+      "title": "Publicly accessible Cloud Storage bucket",
+      "description": "Bucket example-public-data grants access to public principal(s): allUsers.",
+      "project_id": "example-production",
+      "resource": {
+        "type": "storage_bucket",
+        "name": "example-public-data"
+      },
+      "principal": "allUsers",
+      "evidence": {
+        "public_grants": [
+          {
+            "source": "bucket_acl",
+            "principal": "allUsers",
+            "role": "READER"
+          },
+          {
+            "source": "iam_policy",
+            "principal": "allUsers",
+            "role": "roles/storage.objectViewer"
+          }
+        ],
+        "public_access_prevention": "inherited"
+      },
+      "recommendation": "Remove public principals from IAM and ACLs, enable Public Access Prevention, and grant access only to named principals.",
+      "frameworks": [
+        {
+          "framework": "CIS Google Cloud Platform Foundations Benchmark v3.0",
+          "control_id": "5.1",
+          "title": "Ensure Cloud Storage buckets are not anonymously or publicly accessible"
+        },
+        {
+          "framework": "NIST SP 800-53 Rev. 5",
+          "control_id": "AC-3",
+          "title": "Access Enforcement"
+        },
+        {
+          "framework": "NIST SP 800-53 Rev. 5",
+          "control_id": "AC-5",
+          "title": "Separation of Duties"
+        },
+        {
+          "framework": "NIST SP 800-53 Rev. 5",
+          "control_id": "AC-6",
+          "title": "Least Privilege"
+        },
+        {
+          "framework": "NIST SP 800-53 Rev. 5",
+          "control_id": "MP-2",
+          "title": "Media Access"
+        }
+      ]
+    },
+    {
+      "finding_id": "FND-04DF5879FA2A5EBA",
+      "rule_id": "STORAGE_UNIFORM_ACCESS_DISABLED",
+      "category": "STORAGE",
+      "severity": "HIGH",
+      "title": "Uniform bucket-level access is disabled",
+      "description": "Bucket example-public-data permits legacy object/bucket ACL behavior because uniform bucket-level access is disabled.",
+      "project_id": "example-production",
+      "resource": {
+        "type": "storage_bucket",
+        "name": "example-public-data"
+      },
+      "principal": null,
+      "evidence": {
+        "uniform_bucket_level_access": false,
+        "public_access_prevention": "inherited"
+      },
+      "recommendation": "Migrate required ACL grants to bucket IAM and enable uniform bucket-level access.",
+      "frameworks": [
+        {
+          "framework": "CIS Google Cloud Platform Foundations Benchmark v3.0",
+          "control_id": "5.2",
+          "title": "Ensure uniform bucket-level access is enabled"
+        },
+        {
+          "framework": "NIST SP 800-53 Rev. 5",
+          "control_id": "AC-3",
+          "title": "Access Enforcement"
+        },
+        {
+          "framework": "NIST SP 800-53 Rev. 5",
+          "control_id": "AC-5",
+          "title": "Separation of Duties"
+        },
+        {
+          "framework": "NIST SP 800-53 Rev. 5",
+          "control_id": "AC-6",
+          "title": "Least Privilege"
+        },
+        {
+          "framework": "NIST SP 800-53 Rev. 5",
+          "control_id": "MP-2",
+          "title": "Media Access"
+        }
+      ]
+    },
+    {
+      "finding_id": "FND-47160AABC564AA90",
+      "rule_id": "IAM_STALE_SERVICE_ACCOUNT_KEY",
+      "category": "IAM",
+      "severity": "MEDIUM",
+      "title": "Service account key exceeds rotation age",
+      "description": "Key projects/example-production/serviceAccounts/legacy-worker@example-production.iam.gserviceaccount.com/keys/example-user-key-1 is 233.42 days old; the configured maximum is 90 days.",
+      "project_id": "example-production",
+      "resource": {
+        "type": "service_account_key",
+        "name": "projects/example-production/serviceAccounts/legacy-worker@example-production.iam.gserviceaccount.com/keys/example-user-key-1"
+      },
+      "principal": "serviceAccount:legacy-worker@example-production.iam.gserviceaccount.com",
+      "evidence": {
+        "service_account": "legacy-worker@example-production.iam.gserviceaccount.com",
+        "key_type": "USER_MANAGED",
+        "key_origin": null,
+        "disabled": false,
+        "valid_after_time": "2026-01-01T00:00:00Z",
+        "valid_before_time": "9999-12-31T23:59:59Z",
+        "evaluated_at": "2026-08-22T10:03:31.874666Z",
+        "age_days": 233.42,
+        "maximum_age_days": 90
+      },
+      "recommendation": "Replace and delete the old user-managed key. Prefer attached service accounts or Workload Identity Federation to avoid long-lived keys.",
+      "frameworks": [
+        {
+          "framework": "CIS Google Cloud Platform Foundations Benchmark v3.0",
+          "control_id": "1.7",
+          "title": "Rotate user-managed service account keys every 90 days or less"
+        },
+        {
+          "framework": "NIST SP 800-53 Rev. 5",
+          "control_id": "IA-5",
+          "title": "Authenticator Management"
+        }
+      ]
+    }
+  ]
+}
